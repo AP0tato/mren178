@@ -1,0 +1,9 @@
+FOLDER		FILES
+------------------------------------------
+lab1_1 --------	lab1_1.ino
+lab1_2 --------	[empty]
+lab1_3 --------	board_definition.cpp
+	   |---	board_definition.h
+	   |---	linked_list.cpp
+	   |---	linked_list.h
+	   |---	lab1_3.ino
