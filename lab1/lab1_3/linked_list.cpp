@@ -147,16 +147,19 @@ int find_and_delete_data (int val) {
             {
                 p_head = p_head->p_next_node;
                 free(p_temp);
+                p_temp = NULL;
             }
             else if(p_temp == p_tail)
             {
                 p_tail = *pp_node;
                 free(p_temp);
+                p_temp = NULL;
             }
             else
             {
                 (*pp_node)->p_next_node = p_temp->p_next_node;
                 free(p_temp);
+                p_temp = NULL;
             }
 
             return EXIT_OK;
@@ -176,7 +179,6 @@ int find_and_delete_data (int val) {
 // the head and tail pointers. 
 int delete_all_data() {
     Node *p_temp;
-    free(p_tail);
 
     // Loop through all nodes
     while (p_head != NULL) {
