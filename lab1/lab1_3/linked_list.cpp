@@ -54,6 +54,7 @@ int insert_data_at_head (int val){
     if(p_head == NULL)
     {
         p_head = p_new;
+        p_tail = p_head;
     }
     else
     {
@@ -76,8 +77,16 @@ int insert_data_at_tail (int val) {
     // then both the head and back pointers need to be updated.
   
     /*-------------------------insert your code here--------------------------*/
-    p_tail->p_next_node = p_new;
-    p_tail = p_tail->p_next_node;
+    if(p_tail == NULL || p_head == NULL)
+    {
+        p_head = p_new;
+        p_tail = p_head;
+    }
+    else
+    {
+        p_tail->p_next_node = p_new;
+        p_tail = p_tail->p_next_node;
+    }
 
     return EXIT_OK;
 }
@@ -167,14 +176,17 @@ int find_and_delete_data (int val) {
 // the head and tail pointers. 
 int delete_all_data() {
     Node *p_temp;
+    free(p_tail);
 
     // Loop through all nodes
     while (p_head != NULL) {
         /*-----------------------insert your code here-------------------------*/
         p_temp = p_head;
-        find_and_delete_data(p_temp->data_val);
         p_head = p_head->p_next_node;
+        free(p_temp);
+        p_temp = NULL;
     }
-    free(p_tail);
+    p_tail = NULL;
+    p_head = NULL;
     return EXIT_OK;
 }
