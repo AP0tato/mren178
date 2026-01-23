@@ -2,7 +2,7 @@
 FILENAME:     linked_list.cpp 
 COURSE:       MREN 178
 LAB:          1
-STUDENTS:    [STUDENT NAMES AND IDS HERE] 
+STUDENTS:    Ali Abid 20542690, 
 DATE:         
 
 ATTRIBUTIONS: [LIST ANY EXTERNAL CONTIBUTORS/CONTRIBUTIONS HERE] 
@@ -51,8 +51,16 @@ int insert_data_at_head (int val){
     // to update the p_tail pointer as well.
 
     /*-------------------------insert your code here--------------------------*/
+    if(p_head == NULL)
+    {
+        p_head = p_new;
+    }
+    else
+    {
+        p_new->p_next_node = p_head;
+        p_head = p_new;
+    }
 
-  
     return EXIT_OK;   
 }
  
@@ -68,7 +76,9 @@ int insert_data_at_tail (int val) {
     // then both the head and back pointers need to be updated.
   
     /*-------------------------insert your code here--------------------------*/
-  
+    p_tail->p_next_node = p_new;
+    p_tail = p_tail->p_next_node;
+
     return EXIT_OK;
 }
 
@@ -89,6 +99,8 @@ int insert_data_at_middle(int search_val, int val) {
             // Yes it does. This is node we want to add a node after.
 
             /*---------------------insert your code here-----------------------*/
+            p_new->p_next_node = p_temp->p_next_node;
+            p_temp->p_next_node = p_new;
 
             return EXIT_OK;
        }
@@ -96,6 +108,7 @@ int insert_data_at_middle(int search_val, int val) {
        // if we've reached here, node was not found yet - move on to next node
        
        /*-------------------------insert your code here--------------------------*/
+       p_temp = p_temp->p_next_node;
 
     }
     return EXIT_ERROR;
@@ -113,7 +126,7 @@ int find_and_delete_data (int val) {
     // Loop through all nodes
     while (p_temp != NULL) {
         // Does ptemp point to node with sought value?
-       if (p_temp->data_val == val) {
+        if (p_temp->data_val == val) {
            // Yes it does. This is node we want to delete from list.
            
            // Remember: it's possible that we're deleting the first, a middle,
@@ -121,14 +134,30 @@ int find_and_delete_data (int val) {
            // delete the only item in the list. Handle each of these cases. 
             
            /*---------------------insert your code here-----------------------*/
+            if(p_temp == p_head)
+            {
+                p_head = p_head->p_next_node;
+                free(p_temp);
+            }
+            else if(p_temp == p_tail)
+            {
+                p_tail = *pp_node;
+                free(p_temp);
+            }
+            else
+            {
+                (*pp_node)->p_next_node = p_temp->p_next_node;
+                free(p_temp);
+            }
 
-           return EXIT_OK;
+            return EXIT_OK;
         }
        
         // if we've reached here, node was not found yet - move on to next node
     
         /*------------------------insert your code here-----------------------*/
-
+        *pp_node = p_temp;
+        p_temp = p_temp->p_next_node;
     }
     // get here only if we searched whole list and found nothing
     return EXIT_ERROR;
@@ -142,7 +171,10 @@ int delete_all_data() {
     // Loop through all nodes
     while (p_head != NULL) {
         /*-----------------------insert your code here-------------------------*/
-
+        p_temp = p_head;
+        find_and_delete_data(p_temp->data_val);
+        p_head = p_head->p_next_node;
     }
+    free(p_tail);
     return EXIT_OK;
 }

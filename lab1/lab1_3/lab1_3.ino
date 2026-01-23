@@ -10,7 +10,7 @@ void setup(){
 }
 
 void loop(){
-  //checklist();
+  checklist();
 
   // Shows the menu on the LCD
   // Option choice 1--"Add" 2--"show" 3--"remove"
