@@ -25,6 +25,8 @@ void CreateStackArray(Stack stack_array[], int num_stacks){
 int Push(pStack stack, long timestamp, char data) {
   
   /*-------------------------insert your code here--------------------------*/
+  if(IsStackFull(stack))
+    return EXIT_ERR;
   stack->top++;
   stack->stack_of_items[stack->top] = StampedItem {.timestamp = timestamp, .data = data};
   // this return value will need to be changed once your code is written
@@ -34,6 +36,8 @@ int Push(pStack stack, long timestamp, char data) {
 int Pop(pStack stack, long &timestamp, char &data) {
   
   /*-------------------------insert your code here--------------------------*/
+  if(IsStackEmpty(stack))
+    return EXIT_ERR;
   stack->top--;
   // this return value will need to be changed once your code is written
   return EXIT_OK;
@@ -60,10 +64,6 @@ long GetTime(DS3231 rtc_clock) {
   // this return value will need to be changed once your code is written
   bool am = false;
   bool h12 = false;
-  Serial.println("h12");
-  // long curr_time = ((long)rtc_clock.getHour(h12, am)*3600)+rtc_clock.getMinute()*60+rtc_clock.getSecond();
-  Serial.println(h12);
-  // Serial.println(curr_time);
-  long curr_time = 0;
+  long curr_time = ((long)rtc_clock.getHour(h12, am)*3600)+rtc_clock.getMinute()*60+rtc_clock.getSecond();
   return curr_time;
 }

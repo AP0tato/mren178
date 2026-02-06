@@ -56,33 +56,58 @@ bool IsQEmpty (pQueue queue) {
   /*-------------------------insert your code here--------------------------*/
 
   // this return value may need to be changed once your code is written
-  return true;
+  return queue->count==0;
 }
 
 int Enqueue (pQueue queue, pStampedItem item) {
   /*-------------------------insert your code here--------------------------*/
-
+  queue->count++;
+  item->next = queue->front;
+  queue->front = item;
+  if(queue->count == 1)
+    queue->back = queue->front;
   // this return value may need to be changed once your code is written
-  return EXIT_ERR;
+  return EXIT_OK;
 }
 
 int Dequeue (pQueue queue, long &timestamp) {
   /*-------------------------insert your code here--------------------------*/
-
+  if(IsQEmpty(queue))
+    return EXIT_ERR;
+  pStampedItem ptr = queue->front;
+  timestamp = queue->back->timestamp;
+  while(ptr->next != queue->back)
+    ptr = ptr->next;
+  free(queue->back);
+  queue->back = ptr;
+  queue->count--;
   // this return value may need to be changed once your code is written
-  return EXIT_ERR;
+  return EXIT_OK;
 }
 
 int DequeueAll (pQueue queue) {
   /*-------------------------insert your code here--------------------------*/
-
+  if(IsQEmpty(queue))
+    return EXIT_ERR;
   // this return value may need to be changed once your code is written
-  return EXIT_ERR; 
+  pStampedItem ptr = queue->front;
+  queue->front = queue->front->next;
+  free(ptr);
+  while(queue->front)
+  {
+    ptr = queue->front;
+    queue->front = queue->front->next;
+    free(ptr);
+  }
+  queue->count = 0;
+  queue->front = nullptr;
+  queue->back = nullptr;
+  return EXIT_OK; 
 }
 
 long GetTime(DS3231 rtc_clock) {
   /*-------------------------insert your code here--------------------------*/
-
+  bool h12 = false, am = false;
   // this return value may need to be changed once your code is written
-  return 0;
+  return ((long)rtc_clock.getHour(h12, am)*3600)+rtc_clock.getMinute()*60+rtc_clock.getSecond();
 }
