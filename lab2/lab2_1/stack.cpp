@@ -60,6 +60,10 @@ long GetTime(DS3231 rtc_clock) {
   // this return value will need to be changed once your code is written
   bool am = false;
   bool h12 = false;
-  long curr_time = rtc_clock.getHour(h12, am)+rtc_clock.getMinute()+rtc_clock.getSecond();
+  Serial.println("h12");
+  // long curr_time = ((long)rtc_clock.getHour(h12, am)*3600)+rtc_clock.getMinute()*60+rtc_clock.getSecond();
+  Serial.println(h12);
+  // Serial.println(curr_time);
+  long curr_time = 0;
   return curr_time;
 }
