@@ -38,6 +38,8 @@ int Pop(pStack stack, long &timestamp, char &data) {
   /*-------------------------insert your code here--------------------------*/
   if(IsStackEmpty(stack))
     return EXIT_ERR;
+  timestamp = stack->stack_of_items[stack->top].timestamp;
+  data = stack->stack_of_items[stack->top].data;
   stack->top--;
   // this return value will need to be changed once your code is written
   return EXIT_OK;

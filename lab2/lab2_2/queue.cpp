@@ -61,11 +61,11 @@ bool IsQEmpty (pQueue queue) {
 
 int Enqueue (pQueue queue, pStampedItem item) {
   /*-------------------------insert your code here--------------------------*/
+  if(queue->count == 0)
+    queue->back = queue->front = item;
+  else
+    queue->back = queue->back->next = item;
   queue->count++;
-  item->next = queue->front;
-  queue->front = item;
-  if(queue->count == 1)
-    queue->back = queue->front;
   // this return value may need to be changed once your code is written
   return EXIT_OK;
 }
@@ -75,11 +75,11 @@ int Dequeue (pQueue queue, long &timestamp) {
   if(IsQEmpty(queue))
     return EXIT_ERR;
   pStampedItem ptr = queue->front;
-  timestamp = queue->back->timestamp;
-  while(ptr->next != queue->back)
-    ptr = ptr->next;
-  free(queue->back);
-  queue->back = ptr;
+  timestamp = ptr->timestamp;
+  queue->front = queue->front->next;
+  if(!queue->front)
+    queue->back = NULL;
+  free(ptr);
   queue->count--;
   // this return value may need to be changed once your code is written
   return EXIT_OK;
@@ -90,18 +90,14 @@ int DequeueAll (pQueue queue) {
   if(IsQEmpty(queue))
     return EXIT_ERR;
   // this return value may need to be changed once your code is written
-  pStampedItem ptr = queue->front;
-  queue->front = queue->front->next;
-  free(ptr);
   while(queue->front)
   {
-    ptr = queue->front;
+    pStampedItem ptr = queue->front;
     queue->front = queue->front->next;
     free(ptr);
   }
   queue->count = 0;
-  queue->front = nullptr;
-  queue->back = nullptr;
+  queue->back = NULL;
   return EXIT_OK; 
 }
 
