@@ -246,7 +246,63 @@ void _delete (Node *p, Node *n)
 //	n	- points to node to be deleted
 //	p	- points to parent of node to be deleted.
 {
-	// TODO: Implement this function <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	
+	// case 1: empty tree
+
+	// nothing to delete!!
+
+	// case 2: leaf node
+
+	if (n->leftChild == NULL && n->rightChild == NULL)
+	{
+
+		if (p->leftChild == n) p->leftChild = NULL;
+		else p->rightChild = NULL;
+		free(n);
+		return;
+
+	}
+
+	// case 3: node has one child
+
+	else if (n->leftChild == NULL && n->rightChild != NULL)
+	{
+
+		if (p->leftChild == n) p->leftChild = n->rightChild;
+		else p->rightChild = n->rightChild;
+		free(n);
+		return;
+
+	}
+	else if (n->leftChild != NULL && n->rightChild == NULL)
+	{
+
+		if (p->rightChild == n) p->rightChild = n->leftChild;
+		else p->leftChild = n->leftChild;
+		free(n);
+		return;
+
+	}
+
+	// case 4: node has two children
+
+	else if (n->leftChild != NULL && n->rightChild != NULL)
+	{
+
+		Node *worthyNode = n->leftChild;
+		Node *wnParent = n;
+
+		while (worthyNode->rightChild != NULL)
+		{
+			wnParent = worthyNode;
+			worthyNode = worthyNode->rightChild;
+		}
+
+		n->key = worthyNode->key;
+		wnParent->rightChild = NULL;
+		free(worthyNode);
+
+	}
 
 }//_delete()
 
