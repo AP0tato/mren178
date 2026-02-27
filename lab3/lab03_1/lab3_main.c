@@ -10,7 +10,7 @@
 #if defined(_WIN32) || defined(_WIN64)
 	#define COMPORT "COM3" // adjust as needed
 #elif defined(__APPLE__) && defined(__MACH__)
-	#define COMPORT "/dev/cu.usbmodem1101"
+	#define COMPORT "/dev/cu.usbmodem1101" // adjust as needed
 #endif
 
 #define NODEADDED 10
