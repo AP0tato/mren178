@@ -130,12 +130,8 @@ int insert(Key k, void *v, Node *root)
 // by v. Parameter root points to root node of tree.  Note that this code
 // rejects an attempt to insert a duplicate key.
 {
+	// root is never null
 	int result = BST_FAIL;
-	// this if statement can only be true with first root (root of whole tree)
-	if (root == NULL)	{
-		root = initNode(k,v);
-		return BST_SUCCESS;
-		}
 	
 	// already exists in tree ==> can't insert
 	if (root->key == k)
@@ -245,49 +241,42 @@ void _delete (Node *p, Node *n)
 //	n	- points to node to be deleted
 //	p	- points to parent of node to be deleted.
 {
-	
-	// case 1: empty tree
-
-	// nothing to delete!!
+	if ((p == NULL) || (n == NULL))	return;
 
 	// case 2: leaf node
 
 	if (n->leftChild == NULL && n->rightChild == NULL)
 	{
-
+		if(p == n) return; // Cannot truly delete a leaf root
 		if (p->leftChild == n) p->leftChild = NULL;
 		else p->rightChild = NULL;
 		free(n);
 		return;
-
 	}
 
 	// case 3: node has one child
 
 	else if (n->leftChild == NULL && n->rightChild != NULL)
 	{
-
-		if (p->leftChild == n) p->leftChild = n->rightChild;
+		if(p == n) { Node* tmp = p->rightChild; *p = *tmp; free(tmp); return; }
+		else if (p->leftChild == n) p->leftChild = n->rightChild;
 		else p->rightChild = n->rightChild;
 		free(n);
 		return;
-
 	}
 	else if (n->leftChild != NULL && n->rightChild == NULL)
 	{
-
-		if (p->rightChild == n) p->rightChild = n->leftChild;
+		if(p == n) { Node* tmp = p->leftChild; *p = *tmp; free(tmp); return; }
+		else if (p->rightChild == n) p->rightChild = n->leftChild;
 		else p->leftChild = n->leftChild;
 		free(n);
 		return;
-
 	}
 
 	// case 4: node has two children
 
 	else if (n->leftChild != NULL && n->rightChild != NULL)
 	{
-
 		Node *worthyNode = n->leftChild;
 		Node *wnParent = n;
 
@@ -297,19 +286,15 @@ void _delete (Node *p, Node *n)
 			worthyNode = worthyNode->rightChild;
 		}
 
-		n->key = worthyNode->key;
-
-		if (wnParent == n)
-		{
+		if(wnParent->leftChild == worthyNode)
 			wnParent->leftChild = worthyNode->leftChild;
-		}
 		else
-		{
 			wnParent->rightChild = worthyNode->leftChild;
-		}
-		
-		free(worthyNode);
 
+		n->key = worthyNode->key;
+		n->value = worthyNode->value;
+
+		free(worthyNode);
 	}
 
 }//_delete()

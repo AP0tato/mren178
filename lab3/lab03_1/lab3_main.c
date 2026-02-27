@@ -21,9 +21,9 @@
 //	Node* findParentHelper (Key, Node*);
 //	delete (Node*, Node*);
 
-#define	HEIGHT_WRITTEN	0
-#define	FINDPARENTHELPER_WRITTEN	0
-#define	DELETE_WRITTEN	0
+#define	HEIGHT_WRITTEN	1
+#define	FINDPARENTHELPER_WRITTEN	1
+#define	DELETE_WRITTEN	1
 //
 // *** YOU SHOULD NOT MAKE ANY OTHER CHANGES TO THIS CODE ***
 
