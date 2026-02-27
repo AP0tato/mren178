@@ -46,7 +46,7 @@ char *random_string (int count)
 } //random_string()
 
 
-int main (int argc, char argv[])
+int main (int argc, char **argv)
 {
 	int				i;
 	char			*pwd;
