@@ -133,8 +133,7 @@ int insert(Key k, void *v, Node *root)
 	int result = BST_FAIL;
 	// this if statement can only be true with first root (root of whole tree)
 	if (root == NULL)	{
-		Node *n = initNode(k,v);
-		root = n;
+		root = initNode(k,v);
 		return BST_SUCCESS;
 		}
 	
