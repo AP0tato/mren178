@@ -191,6 +191,10 @@ int DataRead(){
 
 #elif defined(__APPLE__) && defined(__MACH__)
 
+#ifndef O_NOCTTY
+#define O_NOCTTY 0
+#endif
+
 int connected;
 uint32_t errors;
 glob_t g;
