@@ -197,18 +197,62 @@ int DataRead(){
 
 int connected;
 uint32_t errors;
-glob_t g;
+static int serialFd = -1;
 
 //Initialize Serial communication with the given COM port
 void Serial(const char *portName)
 {
-    connected = open(portName, O_RDWR | O_NOCTTY);
+    connected = false;
+    serialFd = open(portName, O_RDWR | O_NOCTTY);
+    if(serialFd < 0)
+    {
+        perror("open");
+        return;
+    }
+
+    struct termios tty;
+    if (tcgetattr(serialFd, &tty) != 0)
+    {
+        perror("tcgetattr");
+        close(serialFd);
+        serialFd = -1;
+        return;
+    }
+
+    cfsetispeed(&tty, B9600);
+    cfsetospeed(&tty, B9600);
+    tty.c_cflag |= (CLOCAL | CREAD);
+    tty.c_cflag &= ~PARENB;
+    tty.c_cflag &= ~CSTOPB;
+    tty.c_cflag &= ~CSIZE;
+    tty.c_cflag |= CS8;
+    tty.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+    tty.c_iflag &= ~(IXON | IXOFF | IXANY);
+    tty.c_oflag &= ~OPOST;
+    tty.c_cc[VMIN] = 0;
+    tty.c_cc[VTIME] = 1;
+
+    if (tcsetattr(serialFd, TCSANOW, &tty) != 0)
+    {
+        perror("tcsetattr");
+        close(serialFd);
+        serialFd = -1;
+        return;
+    }
+
+    connected = true;
+    Sleep(ARDUINO_WAIT_TIME);
 }
 
 //Close the connection
 void _Serial()
 {
-
+    if (serialFd >= 0)
+    {
+        close(serialFd);
+        serialFd = -1;
+    }
+    connected = false;
 }
 
 //Read data in a buffer, if nbChar is greater than the
@@ -217,24 +261,76 @@ void _Serial()
 //be read, the number of bytes actually read.
 int ReadData(char *buffer, unsigned int nbChar)
 {
+    if (!connected || serialFd < 0 || buffer == NULL || nbChar == 0)
+    {
+        return 0;
+    }
 
+    ssize_t n = read(serialFd, buffer, nbChar);
+    if (n > 0)
+    {
+        return (int)n;
+    }
+
+    return 0;
 }
 
 //Writes data from a buffer through the Serial connection
 //return true on success.
 int WriteData(const char *buffer, unsigned int nbChar)
 {
+    if (!connected || serialFd < 0 || buffer == NULL || nbChar == 0)
+    {
+        return false;
+    }
 
+    ssize_t written = write(serialFd, buffer, nbChar);
+    return (written == (ssize_t)nbChar) ? true : false;
 }
 
 //Check if we are actually connected
 int IsConnected()
 {
-
+    return connected;
 }
 
 int DataRead()
 {
+    char incomingData[8] = "";
+    int dataLength = 7;
+    int readResult = 0;
+    int num = 0;
+
+    while(IsConnected())
+    {
+        readResult = ReadData(incomingData, dataLength);
+        if (readResult <= 0)
+        {
+            continue;
+        }
+
+        if (readResult >= dataLength)
+        {
+            readResult = dataLength - 1;
+        }
+        incomingData[readResult] = 0;
+
+        char *p = strtok(incomingData, "\n");
+        char n[20];
+        while(p != NULL)
+        {
+            strcpy(n, p);
+            p = strtok(NULL, "\n");
+            num = atoi(n);
+            printf("Value read from sensor: %d\n", num);
+        }
+        if(num)
+        {
+            break;
+        }
+    }
+
+    return num;
 
 }
 
