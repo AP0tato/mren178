@@ -24,7 +24,9 @@
     //Check if we are actually connected
     int IsConnected();
     int DataRead();
+
 #elif defined(__APPLE__) && defined(__MACH__)
+    #include <stdint.h>
     //Initialize Serial communication with the given COM port
     void Serial(const char *portName);
     //Close the connection

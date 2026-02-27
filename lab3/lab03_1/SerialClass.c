@@ -184,8 +184,6 @@ int DataRead(){
 
 #elif defined(__APPLE__) && defined(__MACH__)
 
-#include <stdint.h>
-
 int connected;
 uint32_t errors;
 

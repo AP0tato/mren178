@@ -2,4 +2,6 @@ cmake_minimum_required(VERSION 3.10)
 
 project(lab03_1 C)
 
-add_executable(lab3part1 lab3_bst.c lab3_main.c SerialClass.c)
+file(GLOB C_SOURCES "*.c")
+
+add_executable(lab3_1 ${C_SOURCES})

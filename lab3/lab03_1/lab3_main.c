@@ -1,6 +1,11 @@
 #include "lab3_bst.h"
 
-#define COMPORT "COM4" // adjust as needed
+#if defined(_WIN32) || defined(_WIN64)
+	#define COMPORT "COM4" // adjust as needed
+#elif defined(__APPLE__) && defined(__MACH__)
+	#define COMPORT "/dev/cu.usbmodem1101"
+#endif
+
 #define NODEADDED 10
 #define DATAREADGAP 1000
 
