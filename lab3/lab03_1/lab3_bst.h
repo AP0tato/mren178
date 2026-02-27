@@ -1,6 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <tchar.h>
+
+#if defined(_WIN32) || defined(_WIN64)
+	#include <tchar.h>
+#endif
+
 #include "SerialClass.h"	
 #include <string.h>
 
