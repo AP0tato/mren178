@@ -299,7 +299,16 @@ void _delete (Node *p, Node *n)
 		}
 
 		n->key = worthyNode->key;
-		wnParent->rightChild = NULL;
+
+		if (wnParent == n)
+		{
+			wnParent->leftChild = worthyNode->leftChild;
+		}
+		else
+		{
+			wnParent->rightChild = worthyNode->leftChild;
+		}
+		
 		free(worthyNode);
 
 	}
