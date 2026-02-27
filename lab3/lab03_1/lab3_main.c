@@ -1,5 +1,12 @@
 #include "lab3_bst.h"
 
+#if !defined(_WIN32) && !defined(_WIN64)
+	#include <unistd.h>
+	#ifndef Sleep
+		#define Sleep(ms) usleep((ms) * 1000)
+	#endif
+#endif
+
 #if defined(_WIN32) || defined(_WIN64)
 	#define COMPORT "COM3" // adjust as needed
 #elif defined(__APPLE__) && defined(__MACH__)

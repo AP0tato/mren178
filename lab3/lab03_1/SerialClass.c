@@ -1,5 +1,12 @@
 #include "SerialClass.h"
 
+#if !defined(_WIN32) && !defined(_WIN64)
+#include <fcntl.h>
+#include <unistd.h>
+#endif
+
+#include <string.h>
+
 #define false 0
 #define true 1
 
@@ -186,11 +193,12 @@ int DataRead(){
 
 int connected;
 uint32_t errors;
+glob_t g;
 
 //Initialize Serial communication with the given COM port
 void Serial(const char *portName)
 {
-
+    connected = open(portName, O_RDWR | O_NOCTTY);
 }
 
 //Close the connection
