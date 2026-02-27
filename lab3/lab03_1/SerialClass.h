@@ -27,6 +27,16 @@
 
 #elif defined(__APPLE__) && defined(__MACH__)
     #include <stdint.h>
+    #include <unistd.h>
+    #include <termios.h>
+    #include <glob.h>
+    #include <fcntl.h>
+
+    static inline void Sleep(unsigned int milliseconds)
+    {
+        usleep(milliseconds * 1000);
+    }
+
     //Initialize Serial communication with the given COM port
     void Serial(const char *portName);
     //Close the connection
