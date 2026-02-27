@@ -209,7 +209,16 @@ Node *_findParentHelper (Key k, Node* root)
 // Help find parent of node with key == k. Parameter root is node with
 // at least one child (see findParent()).
 {
-	// TODO: Implement this function <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+	pNode *traverser = root;
+
+	if ((traverser->leftChild != NULL && traverser->leftChild->key == k) || (traverser->rightChild != NULL && traverser->rightChild->key == k))	return traverser; // Found the parent of the node with key k
+
+	else if (k < traverser->key && traverser->leftChild != NULL) return _findParentHelper(k, traverser->leftChild); // Key is less than current node value
+
+	else if (k > traverser->key && traverser->rightChild != NULL) return _findParentHelper(k, traverser->rightChild); // Key is greater than current node value
+
+	else return NULL; // The key was not found
 
 }//findparenthelper()
 
