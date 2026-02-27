@@ -2,10 +2,11 @@
 FILENAME:     lab3_bst.c 
 COURSE:       MREN 178
 LAB:          3
-STUDENTS:    [STUDENT NAMES AND IDS HERE] 
+STUDENTS:    Andres Escolar, 20529215,
+			 Ali Abid, 20542690
 DATE:         
 
-ATTRIBUTIONS: [LIST ANY EXTERNAL CONTIBUTORS/CONTRIBUTIONS HERE] 
+ATTRIBUTIONS: N/A
 ******************************************************************************/
 
 ////////////////////////////////////////////////////////////////////////////////    
@@ -186,7 +187,20 @@ int _height(Node *root)
 // Height of an empty tree is -1.  Height of a leaf node is 0. Height of other
 // nodes is 1 more than larger height of node's two subtrees.
 { 
-	// your code goes here  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+	pNode *traverser = root;
+
+	// Case 1: empty tree
+	
+	if (traverser == NULL)	return -1;
+
+	// Case 2: leaf node
+
+	if (traverser->leftChild == NULL && traverser->rightChild == NULL)	return 0;
+
+	// Case 3: 
+
+	return 1 + intmax(_height(traverser->leftChild), _height(traverser->rightChild));
 
 }//height()
 
@@ -195,7 +209,7 @@ Node *_findParentHelper (Key k, Node* root)
 // Help find parent of node with key == k. Parameter root is node with
 // at least one child (see findParent()).
 {
-	// your code goes here  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	// TODO: Implement this function <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 }//findparenthelper()
 
@@ -223,7 +237,7 @@ void _delete (Node *p, Node *n)
 //	n	- points to node to be deleted
 //	p	- points to parent of node to be deleted.
 {
-	// your code goes here  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	// TODO: Implement this function <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 }//_delete()
 
