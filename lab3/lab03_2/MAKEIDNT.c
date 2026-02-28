@@ -94,20 +94,20 @@ int main (int argc, char **argv)
 		// create random id - guaranteeing some duplicates
 		if (i % (COUNT_IDENT/20))	{
 			dup = 0;
-			id = (rand() << 15) + rand();
+			id = ((unsigned int)rand() << 15) + (unsigned int)rand();
 		} else	{
 			dup = 1;	
 			}
 		// Print IDENT file
 		if (id == 0) continue;
-		fprintf (fp_idnt, "%010d    %s\n", id, random_string (12));
+		fprintf (fp_idnt, "%010u    %s\n", id, random_string (12));
 		// See if we should also add to deletes
 		if (dup == 0)	{
 			if ((i % 2000) == 0)	{
-				fprintf (fp_dels, "%010d\n", id);
+				fprintf (fp_dels, "%010u\n", id);
 				}
 			if ((i % 8192) == 0)	{
-				fprintf (fp_luks, "%010d\n", id);
+				fprintf (fp_luks, "%010u\n", id);
 				}
 			}//endif not duplicate
 		}//endfor
