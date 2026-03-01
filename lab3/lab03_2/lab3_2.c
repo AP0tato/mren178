@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -59,7 +60,12 @@ int nodeManagement(Node **head, unsigned int userID, char *userPassword)
     // Puts the new node in the tree in the correct place, or updates the password if the userID already exists
     if (userID < traverser->id) traverser->left = newNode;
     else if (userID > traverser->id) traverser->right = newNode;
-    else if (userID == traverser->id) traverser->password = userPassword;
+    else if (userID == traverser->id) 
+    {
+        free(traverser->password); 
+        traverser->password = userPassword; 
+        free(newNode); 
+    }
     return 0;
 }
 
@@ -71,45 +77,53 @@ void delete(Node **head, unsigned int id)
     Node *parent = NULL;
     Node *curr = *head;
 
-    while(curr != NULL)
+    while(curr != NULL && curr->id != id)
     {
         parent = curr;
-        if(id == curr->id)
-            return;
-        else if(id < curr->id)
+        if(id < curr->id)
             curr = curr->left;
         else
             curr = curr->right;
     }
 
+    if(curr == NULL)
+        return;
+
+    if(parent == NULL)
+        parent = curr;
+
     if(curr->right == NULL && curr->left == NULL)
     {
         if(parent == curr)
         {
+            free(curr->password);
             free(curr);
-            curr = NULL;
+            *head = NULL;
             return;
         }
         else if(parent->right == curr)
             parent->right = NULL;
         else
             parent->left = NULL;
+        free(curr->password);
         free(curr);
         return;
     }
     else if(curr->left != NULL && curr->right == NULL)
     {
-        if(curr == parent) parent = curr->left;
+        if(curr == parent) *head = curr->left;
         else if(parent->left == curr) parent->left = curr->left;
         else parent->right = curr->left;
+        free(curr->password);
         free(curr);
         return;
     }
     else if(curr->right != NULL && curr->left == NULL)
     {
-        if(curr == parent) parent = curr->right;
+        if(curr == parent) *head = curr->right;
         else if(parent->left == curr) parent->left = curr->right;
         else parent->right = curr->right;
+        free(curr->password);
         free(curr);
         return;
     }
@@ -118,18 +132,20 @@ void delete(Node **head, unsigned int id)
         Node *swap_node = curr->left;
         Node *s_parent = curr;
 
-        while(curr->right != NULL)
+        while(swap_node->right != NULL)
         {
-            s_parent = curr;
-            curr = curr->right;
+            s_parent = swap_node;
+            swap_node = swap_node->right;
         }
 
         if(s_parent->right == swap_node)
             s_parent->right = swap_node->left;
         else
-            s_parent->left = swap_node->right;
+            s_parent->left = swap_node->left;
 
         curr->id = swap_node->id;
+
+        free(curr->password);
         curr->password = swap_node->password;
 
         free(swap_node);
@@ -146,7 +162,7 @@ char* search(Node *head, unsigned int id)
         else
             curr = curr->left;
     }
-    if(curr->id == id)
+    if(curr != NULL && curr->id == id)
         return curr->password;
     else
         return "Not Found";
@@ -248,7 +264,7 @@ int main(int argc, char **argv)
         char *end;
         unsigned long user = strtoul(u, &end, 10);
 
-        printf("%010u %s", (unsigned int) user, search(&head, (unsigned int) user));
+        printf("%010u %s\n", (unsigned int) user, search(head, (unsigned int) user));
 
         free(u);
     }
