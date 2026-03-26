@@ -265,6 +265,8 @@ void findShortestPath(int start, int target, int prev[]) {
     dist[start] = 0;
 
     // Compute shortest paths using Dijkstra’s Algorithm
+    // Andres Escolar 20529215
+    // Ali Abid xxxxxxxx
     // ------------------------YOUR CODE GOES HERE-----------------------------
 
     int unvisitedNodes;
