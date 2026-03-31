@@ -1,4 +1,4 @@
-z#include <LiquidCrystal.h>
+#include <LiquidCrystal.h>
 #include <SoftwareSerial.h>
 
 #define NUM_NODES 4    
