@@ -1,8 +1,8 @@
-z#include <LiquidCrystal.h>
+#include <LiquidCrystal.h>
 #include <SoftwareSerial.h>
-
-#define NUM_NODES 4    
-#define INF 9999       
+#include "grid_graph.h"
+     
+#define INF 9999 
 #define BUZZER_PIN 13   
 #define MAX_MSG_LEN 10 
 
@@ -21,15 +21,7 @@ SoftwareSerial hc12(10, 11);
 
 // Each node in your network needs to have a unique id.  Change NODE_ID
 // to be a value between 0 and NUM_NODES-1
-const int NODE_ID = 1;  
-
-// This is an arbitrary adjacency matrix denoting the topology of the network 
-int graph[NUM_NODES][NUM_NODES] = {
-    {0, 1, INF, 2},  
-    {1, 0, 3, INF},  
-    {INF, 3, 0, 1},  
-    {2, INF, 1, 0}   
-};
+const int NODE_ID = 5;  
 
 int destinationNode = 0;
 char message[MAX_MSG_LEN + 1];  
@@ -265,41 +257,35 @@ void findShortestPath(int start, int target, int prev[]) {
     dist[start] = 0;
 
     // Compute shortest paths using Dijkstra’s Algorithm
-    // Andres Escolar 20529215
-    // Ali Abid xxxxxxxx
     // ------------------------YOUR CODE GOES HERE-----------------------------
-
-    int unvisitedNodes;
-
     for (int i = 0; i < NUM_NODES; i++) {
-
-        unvisitedNodes = -1; // Sentinel value
-
+        int u = -1;
+        int minDistance = INF;
         for (int j = 0; j < NUM_NODES; j++) {
-
-            if (!visited[j] && (unvisitedNodes == -1 || dist[j] < dist[unvisitedNodes]))
-                unvisitedNodes = j;
-
+            if (!visited[j] && dist[j] < minDistance) {
+                minDistance = dist[j];
+                u = j;
+            }
         }
+        if (u == -1) {
+            break;
+        }
+        visited[u] = true;
+        if (u == target) {
+            break;
+        }
+        Edge neighbours[MAX_NEIGHBOURS];
+        uint8_t count = graphGetNeighbours((uint8_t)u, neighbours);
+        for (uint8_t i = 0; i < count; i++) {
+            int v = neighbours[i].to;
+            int weight = neighbours[i].weight;
 
-        if (unvisitedNodes == -1) break;
-            
-        else visited[unvisitedNodes] = true;
+            if (!visited[v]) {
+                int newDist = dist[u] + weight;
 
-        for (int n = 0; n < NUM_NODES; n++) {
-
-            if (!visited[n]) {
-
-                if (graph[unvisitedNodes][n] != INF && graph) {
-
-                    int distance = dist[unvisitedNodes] + graph[unvisitedNodes][n];
-
-                    if (dist[n] > distance) {
-
-                        dist[n] = distance;
-                        prev[n] = unvisitedNodes;
-
-                    }
+                if (newDist < dist[v]) {
+                    dist[v] = newDist;
+                    prev[v] = u;
                 }
             }
         }
@@ -317,10 +303,10 @@ void findShortestPath(int start, int target, int prev[]) {
 
     // Prints the path to screen 
     lcd.clear();
-    lcd.print("Path: ");
+    lcd.print("Path:");
     for (int i = count - 1; i >= 0; i--) {
         lcd.print(path[i]);
-        if (i > 0) lcd.print("->");
+        if (i > 0) lcd.print(">");
     }
     delay(2000);
 }
